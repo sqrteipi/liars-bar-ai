@@ -99,12 +99,14 @@ def game():
     round = 0
 
     # Card distribution code
+    # ty[i] = # of card ty for player i
     q = [0, 0, 0, 0]
     k = [0, 0, 0, 0]
     a = [0, 0, 0, 0]
     j = [0, 0, 0, 0]
     p = [0, 0, 0, 0]
     card_name = [" Queen", " King ", " Ace  ", " Joker"]
+    # Total no. of cards for each type
     cq = 6
     ck = 6
     ca = 6
@@ -112,18 +114,18 @@ def game():
     send = [0, 0, 0, 0]
 
     for i in range(20):
-        r = randint(0, 19-i)
+        r = randint(0, 19 - i) # 19 - i = Remaining Cards
         if r < cq:
             q[i//5] += 1
             cq -= 1
             if i < 5:
                 p[0] += 1
-        elif r < cq+ck and ck != 0:
+        elif r < cq + ck and ck != 0:
             k[i//5] += 1
             ck -= 1
             if i < 5:
                 p[1] += 1
-        elif r < cq+ck+ca:
+        elif r < cq + ck + ca:
             a[i//5] += 1
             ca -= 1
             if i < 5:
