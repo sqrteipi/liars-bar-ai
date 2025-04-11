@@ -95,18 +95,19 @@ def main():
 # Main game
 def game():
 
+    # Enable key repeat: 500ms delay, 50ms interval
+    pygame.key.set_repeat(500, 50)
+
     # Round: Now is which player's turn (Player = 0, AI1 = 1, AI2 = 2, AI3 = 3)
     round = 0
 
     # Card distribution code
-    # ty[i] = # of card ty for player i
     q = [0, 0, 0, 0]
     k = [0, 0, 0, 0]
     a = [0, 0, 0, 0]
     j = [0, 0, 0, 0]
     p = [0, 0, 0, 0]
     card_name = [" Queen", " King ", " Ace  ", " Joker"]
-    # Total no. of cards for each type
     cq = 6
     ck = 6
     ca = 6
@@ -114,7 +115,7 @@ def game():
     send = [0, 0, 0, 0]
 
     for i in range(20):
-        r = randint(0, 19 - i) # 19 - i = Remaining Cards
+        r = randint(0, 19 - i)
         if r < cq:
             q[i//5] += 1
             cq -= 1
@@ -138,21 +139,29 @@ def game():
 
     textbox_active = False
     text_input = ""
+    cursor_pos = 0  # Tracks insertion point in text_input
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
-            # Handle text input when textbox is active
             elif textbox_active and event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE: # Spacebar
-                    text_input += " "
-                elif event.key == pygame.K_BACKSPACE: # Deleting characters
-                    text_input = text_input[:-1]
-                elif event.key == pygame.K_RETURN:  # Enter key for new line
-                    text_input += "\n"
-                elif event.unicode.isprintable():  # Accept alphanumeric characters
-                    text_input += event.unicode
+                if event.key == pygame.K_SPACE:
+                    text_input = text_input[:cursor_pos] + " " + text_input[cursor_pos:]
+                    cursor_pos += 1
+                elif event.key == pygame.K_BACKSPACE and cursor_pos > 0:
+                    text_input = text_input[:cursor_pos-1] + text_input[cursor_pos:]
+                    cursor_pos -= 1
+                elif event.key == pygame.K_RETURN:
+                    text_input = text_input[:cursor_pos] + "\n" + text_input[cursor_pos:]
+                    cursor_pos += 1
+                elif event.key == pygame.K_LEFT and cursor_pos > 0:
+                    cursor_pos -= 1
+                elif event.key == pygame.K_RIGHT and cursor_pos < len(text_input):
+                    cursor_pos += 1
+                elif event.unicode.isprintable():
+                    text_input = text_input[:cursor_pos] + event.unicode + text_input[cursor_pos:]
+                    cursor_pos += 1
 
         keys = pygame.key.get_pressed()
         mouse_pos = pygame.mouse.get_pos()
@@ -203,17 +212,58 @@ def game():
             textbox = pygame.Rect(screen_width-790, 10, 780, 240)
             send_button = pygame.Rect(screen_width-800, 260, 800, 50)
             dbwt(screen, textbox_frame, "", 0, "black", "white", 0)
-            dbwt(screen, textbox, text_input, 30, "white", "black", 10, align="left", multiline=True)
+
             if text_input != "":
-                if send_button.collidepoint(mouse_pos) and mouse_click[0]:
-                    round = 1
-                    textbox_active = False
-                elif send_button.collidepoint(mouse_pos):
-                    dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
-                else:
-                    dbwt(screen, send_button, "Send", 30, "black", "white", 10)
+                dbwt(screen, textbox, text_input, 30, "white", "black", 10, align="left", multiline=True)
+                if textbox_active:
+                    # Render the gray "|" cursor at cursor_pos
+                    font = pygame.font.Font(None, 30)
+                    # Split text into lines up to cursor_pos
+                    text_before_cursor = text_input[:cursor_pos]
+                    lines = []
+                    max_width = textbox.width - 20  # Match dbwt padding
+                    current_line = ""
+                    for char in text_before_cursor:
+                        test_line = current_line + char
+                        if char == "\n":
+                            lines.append(current_line)
+                            current_line = ""
+                        elif font.render(test_line, True, "white").get_width() <= max_width:
+                            current_line = test_line
+                        else:
+                            lines.append(current_line)
+                            current_line = char
+                    if current_line:
+                        lines.append(current_line)
+                    # Calculate cursor position
+                    last_line = lines[-1] if lines else ""
+                    text_surface = font.render(last_line, True, "white")
+                    cursor_x = textbox.left + 10 + text_surface.get_width()
+                    cursor_y = textbox.top + 10 + (len(lines) - 1) * 30
+                    # Blinking cursor
+                    if pygame.time.get_ticks() % 1000 < 500:
+                        cursor_surface = font.render("|", True, "gray69")
+                        screen.blit(cursor_surface, (cursor_x, cursor_y))
+                    else:
+                        cursor_surface = font.render("|", True, "white")
+                        screen.blit(cursor_surface, (cursor_x, cursor_y))
             else:
+                dbwt(screen, textbox, "Input Text Here", 30, "gray69", "black", 10, align="left", multiline=True)
+                if textbox_active:
+                    # Cursor at start
+                    if pygame.time.get_ticks() % 1000 < 500:
+                        font = pygame.font.Font(None, 30)
+                        cursor_surface = font.render("|", True, "gray69")
+                        screen.blit(cursor_surface, (textbox.left + 10, textbox.top + 10))
+
+            if send_button.collidepoint(mouse_pos) and mouse_click[0]:
+                round = 1
+                textbox_active = False
+            elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
+            else:
+                dbwt(screen, send_button, "Send", 30, "black", "white", 10)
+
             if textbox.collidepoint(mouse_pos) and mouse_click[0]:
                 textbox_active = True
 
