@@ -1,4 +1,5 @@
 import pygame
+import time
 from random import randint
 
 global easter_egg
@@ -15,7 +16,7 @@ pygame.display.set_caption("Liar's Bar (v0.0r)")
 easter_egg = False
 
 # Drawing button with text (updated for newlines and wrapping)
-def dbwt(screen, button_rect, text, font_size, text_color, button_color, align, border, multiline=False):
+def dbwt(screen, button_rect, text, font_size, text_color, button_color, border, align="center", multiline=False):
     font = pygame.font.Font(None, font_size)
     pygame.draw.rect(screen, button_color, button_rect)
     
@@ -81,9 +82,9 @@ def main():
             if start_button.collidepoint(mouse_pos) and mouse_click[0]:
                 game()
             elif start_button.collidepoint(mouse_pos):
-                dbwt(screen, start_button, "Start", 65, "black", "gray69", "centre", 10)
+                dbwt(screen, start_button, "Start", 65, "black", "gray69", 10)
             else:
-                dbwt(screen, start_button, "Start", 65, "black", "white", "centre", 10)
+                dbwt(screen, start_button, "Start", 65, "black", "white", 10)
             
         pygame.display.flip()
         # limits FPS to 60
@@ -161,54 +162,56 @@ def game():
             for i in range(4):
                 current_cards = pygame.Rect(0, i*65, 400, 50)
                 card_text = "You have " + str(p[i]) + card_name[i]
-                dbwt(screen, current_cards, card_text, 65, "white", "black", "left", 10)
+                dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
                 
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
                 send_queen_text = "Send " + str(send[i]) + card_name[i] + " out"
 
-                dbwt(screen, card_count_button, send_queen_text, 30, "black", "gray69", "centre", 10)
+                dbwt(screen, card_count_button, send_queen_text, 30, "black", "gray69", 10)
 
                 if p[i] > 0 and send[0]+send[1]+send[2]+send[3] < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0]:
                         send[i] += 1
                         p[i] -= 1
                         textbox_active = False
+                        time.sleep(0.167)
                     elif card_increase_button.collidepoint(mouse_pos):
-                        dbwt(screen, card_increase_button, "+1", 30, "black", "gray69", "centre", 10)
+                        dbwt(screen, card_increase_button, "+1", 30, "black", "gray69", 10)
                     else:
-                        dbwt(screen, card_increase_button, "+1", 30, "black", "white", "centre", 10)
+                        dbwt(screen, card_increase_button, "+1", 30, "black", "white", 10)
                 else:
-                    dbwt(screen, card_increase_button, "+1", 30, "black", "gray69", "centre", 10)
+                    dbwt(screen, card_increase_button, "+1", 30, "black", "gray55", 10)
 
                 if send[i] > 0:
                     if card_decrease_button.collidepoint(mouse_pos) and mouse_click[0]:
                         send[i] -= 1
                         p[i] += 1
                         textbox_active = False
+                        time.sleep(0.167)
                     elif card_decrease_button.collidepoint(mouse_pos):
-                        dbwt(screen, card_decrease_button, "-1", 30, "black", "gray69", "centre", 10)
+                        dbwt(screen, card_decrease_button, "-1", 30, "black", "gray69", 10)
                     else:
-                        dbwt(screen, card_decrease_button, "-1", 30, "black", "white", "centre", 10)
+                        dbwt(screen, card_decrease_button, "-1", 30, "black", "white", 10)
                 else:
-                    dbwt(screen, card_decrease_button, "-1", 30, "black", "gray69", "centre", 10)
+                    dbwt(screen, card_decrease_button, "-1", 30, "black", "gray55", 10)
                 
             textbox_frame = pygame.Rect(screen_width-800, 0, 800, 260)
             textbox = pygame.Rect(screen_width-790, 10, 780, 240)
             send_button = pygame.Rect(screen_width-800, 260, 800, 50)
-            dbwt(screen, textbox_frame, "", 0, "black", "white", "left", 0)
-            dbwt(screen, textbox, text_input, 30, "white", "black", "left", 10, multiline=True)
+            dbwt(screen, textbox_frame, "", 0, "black", "white", 0)
+            dbwt(screen, textbox, text_input, 30, "white", "black", 10, align="left", multiline=True)
             if text_input != "":
                 if send_button.collidepoint(mouse_pos) and mouse_click[0]:
                     round = 1
                     textbox_active = False
                 elif send_button.collidepoint(mouse_pos):
-                    dbwt(screen, send_button, "Send", 30, "black", "gray69", "centre", 10)
+                    dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
                 else:
-                    dbwt(screen, send_button, "Send", 30, "black", "white", "centre", 10)
+                    dbwt(screen, send_button, "Send", 30, "black", "white", 10)
             else:
-                dbwt(screen, send_button, "Send", 30, "black", "gray69", "centre", 10)
+                dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
             if textbox.collidepoint(mouse_pos) and mouse_click[0]:
                 textbox_active = True
 
