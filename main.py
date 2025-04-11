@@ -102,40 +102,28 @@ def game():
     round = 0
 
     # Card distribution code
-    q = [0, 0, 0, 0]
-    k = [0, 0, 0, 0]
-    a = [0, 0, 0, 0]
-    j = [0, 0, 0, 0]
-    p = [0, 0, 0, 0]
+    p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     card_name = [" Queen", " King ", " Ace  ", " Joker"]
     cq = 6
     ck = 6
     ca = 6
     cj = 2
-    send = [0, 0, 0, 0]
+    send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
     for i in range(20):
         r = randint(0, 19 - i)
         if r < cq:
-            q[i//5] += 1
             cq -= 1
-            if i < 5:
-                p[0] += 1
+            p[i//5][0] += 1
         elif r < cq + ck and ck != 0:
-            k[i//5] += 1
             ck -= 1
-            if i < 5:
-                p[1] += 1
+            p[i//5][1] += 1
         elif r < cq + ck + ca:
-            a[i//5] += 1
             ca -= 1
-            if i < 5:
-                p[2] += 1
+            p[i//5][2] += 1
         else:
-            j[i//5] += 1
             cj -= 1
-            if i < 5:
-                p[3] += 1
+            p[i//5][3] += 1
 
     textbox_active = False
     text_input = ""
@@ -172,20 +160,20 @@ def game():
         if round == 0:
             for i in range(4):
                 current_cards = pygame.Rect(0, i*65, 400, 50)
-                card_text = "You have " + str(p[i]) + card_name[i]
+                card_text = "You have " + str(p[0][i]) + card_name[i]
                 dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
                 
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
-                send_queen_text = "Send " + str(send[i]) + card_name[i] + " out"
+                send_queen_text = "Send " + str(send[0][i]) + card_name[i] + " out"
 
                 dbwt(screen, card_count_button, send_queen_text, 30, "black", "gray69", 10)
 
-                if p[i] > 0 and send[0]+send[1]+send[2]+send[3] < 3:
+                if p[0][i] > 0 and sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0]:
-                        send[i] += 1
-                        p[i] -= 1
+                        send[0][i] += 1
+                        p[0][i] -= 1
                         textbox_active = False
                         time.sleep(0.167)
                     elif card_increase_button.collidepoint(mouse_pos):
@@ -195,10 +183,10 @@ def game():
                 else:
                     dbwt(screen, card_increase_button, "+1", 30, "black", "gray55", 10)
 
-                if send[i] > 0:
+                if send[0][i] > 0:
                     if card_decrease_button.collidepoint(mouse_pos) and mouse_click[0]:
-                        send[i] -= 1
-                        p[i] += 1
+                        send[0][i] -= 1
+                        p[0][i] += 1
                         textbox_active = False
                         time.sleep(0.167)
                     elif card_decrease_button.collidepoint(mouse_pos):
