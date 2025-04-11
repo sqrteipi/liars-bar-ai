@@ -98,7 +98,7 @@ def game():
     # Enable key repeat: 500ms delay, 50ms interval
     pygame.key.set_repeat(500, 50)
 
-    # Round: Now is which player's turn (Player = 0, AI1 = 1, AI2 = 2, AI3 = 3)
+    # Round: Now is which player's turn (mod 4 Player = 0, AI1 = 1, AI2 = 2, AI3 = 3)
     round = 0
 
     # Card distribution code
@@ -109,16 +109,19 @@ def game():
     ca = 6
     cj = 2
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-
+    
+    status = [1, 1, 1, 1, 1] # -1 = death, 0 = pass, 1 = in-game
+    
+    # Generate Cards
     for i in range(20):
         r = randint(0, 19 - i)
-        if r < cq:
+        if r < cq and cq > 0:
             cq -= 1
-            p[i//5][0] += 1
-        elif r < cq + ck and ck != 0:
+            p[i//5][0] += 1   
+        elif r < cq + ck and ck > 0:
             ck -= 1
             p[i//5][1] += 1
-        elif r < cq + ck + ca:
+        elif r < cq + ck + ca and ca > 0:
             ca -= 1
             p[i//5][2] += 1
         else:
@@ -157,9 +160,9 @@ def game():
 
         screen.fill("black")
 
-        if round == 0:
+        if round % 4 == 0:
             for i in range(4):
-                current_cards = pygame.Rect(0, i*65, 400, 50)
+                current_cards = pygame.Rect(0, i * 65, 400, 50)
                 card_text = "You have " + str(p[0][i]) + card_name[i]
                 dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
                 
