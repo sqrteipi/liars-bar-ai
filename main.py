@@ -131,8 +131,10 @@ def game():
     textbox_active = False
     text_input = ""
     cursor_pos = 0  # Tracks insertion point in text_input
-
-    while True:
+    running = True
+    debug_output = True
+    
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -159,8 +161,14 @@ def game():
         mouse_click = pygame.mouse.get_pressed()
 
         screen.fill("black")
-
+        
         if round % 4 == 0:
+            if debug_output:
+                if round == 0:
+                    print("No previous cards!")
+                else:
+                    print(send[(i - 1) % 4])
+                debug_output = False
             for i in range(4):
                 current_cards = pygame.Rect(0, i * 65, 400, 50)
                 card_text = "You have " + str(p[0][i]) + card_name[i]
@@ -248,7 +256,7 @@ def game():
                         screen.blit(cursor_surface, (textbox.left + 10, textbox.top + 10))
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0]:
-                round = 1
+                round += 1
                 textbox_active = False
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
@@ -259,7 +267,10 @@ def game():
                 textbox_active = True
 
         else:
-            round = round  # @kiu
+            debug_output = True
+            print(send[(i - 1) % 4])
+            round += 1 # @kiu
+            
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
