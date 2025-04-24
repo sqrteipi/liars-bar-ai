@@ -150,8 +150,8 @@ def game():
             send_button = pygame.Rect(screen_width - 800, 60, 300, 80)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
-                round += 1
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+                round += 1
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
             else:
@@ -160,8 +160,8 @@ def game():
             liar_button = pygame.Rect(screen_width - 400, 60, 300, 80)
 
             if liar_button.collidepoint(mouse_pos) and mouse_click[0] and round != 0:
-                round += 1
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+                round += 1
             elif liar_button.collidepoint(mouse_pos) and round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
             elif round != 0:
