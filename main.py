@@ -146,6 +146,75 @@ def game():
                         dbwt(screen, card_decrease_button, "-1", 30, "black", "white", 10)
                 else:
                     dbwt(screen, card_decrease_button, "-1", 30, "black", "gray55", 10)
+                
+            textbox_frame = pygame.Rect(screen_width-800, 0, 800, 260)
+            textbox = pygame.Rect(screen_width-790, 10, 780, 240)
+            send_button = pygame.Rect(screen_width-800, 260, 800, 50)
+            # dbwt(screen, textbox_frame, "", 0, "black", "white", 0)
+            
+            # # Calculate cursor position
+            # font = pygame.font.Font(None, 30)
+            # char_spacing = 0
+            # text_before_cursor = text_input[:cursor_pos] if text_input else ""
+            # lines = []
+            # max_width = textbox.width - 20
+            # current_line = ""
+            # for char in text_before_cursor:
+            #     test_line = current_line + char
+            #     if char == "\n":
+            #         lines.append(current_line)
+            #         current_line = ""
+            #     elif font.render(test_line, True, "white").get_width() <= max_width:
+            #         current_line = test_line
+            #     else:
+            #         lines.append(current_line)
+            #         current_line = char
+            # if current_line:
+            #     lines.append(current_line)
+            # last_line = lines[-1] if lines else ""
+            # x_pos = 0
+            # for char in last_line:
+            #     x_pos += font.render(char, True, "white").get_width() + char_spacing
+            
+            # # Set cursor position
+            # cursor_y = textbox.top + 10 + line_count * 30
+            # if not text_input or cursor_pos == 0:
+            #     cursor_x = textbox.left + 10
+            # elif text_input[cursor_pos - 1] == "\n":
+            #     cursor_x = textbox.left + 10  # Start of new line after \n
+            # else:
+            #     cursor_x = textbox.left + 10 + x_pos  # Position after last character
+
+            # if text_input != "":
+            #     dbwt(screen, textbox, text_input, 30, "white", "black", 10, align="left", multiline=True, char_spacing=0)
+            #     if textbox_active:
+            #         if pygame.time.get_ticks() % 1000 < 500:
+            #             cursor_surface = font.render("|", True, "white")
+            #         else:
+            #             cursor_surface = font.render("|", True, "gray69")
+            #         screen.blit(cursor_surface, (cursor_x, cursor_y))
+            # else:
+            #     dbwt(screen, textbox, "Input Text Here", 30, "gray69", "black", 10, align="left", multiline=True, char_spacing=0)
+            #     if textbox_active:
+            #         if pygame.time.get_ticks() % 1000 < 500:
+            #             cursor_surface = font.render("|", True, "gray69")
+            #             screen.blit(cursor_surface, (cursor_x, cursor_y))
+
+            if send_button.collidepoint(mouse_pos) and mouse_click[0]:
+                round += 1
+                textbox_active = False
+            elif send_button.collidepoint(mouse_pos):
+                dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
+            else:
+                dbwt(screen, send_button, "Send", 30, "black", "white", 10)
+
+            if textbox.collidepoint(mouse_pos) and mouse_click[0]:
+                textbox_active = True
+            
+        else:
+            debug_output = True
+            print(send[(round - 1) % 4])
+            round += 1
 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
