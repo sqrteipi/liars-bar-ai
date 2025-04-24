@@ -50,18 +50,19 @@ def game():
     pygame.key.set_repeat(200, 30)
 
     round = 0
-    p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+
     card_name = ["Queen", "King", "Ace", "Joker"]
-    cq = 6
-    ck = 6
-    ca = 6
-    cj = 2
+    cq, ck, ca, cj = 6, 6, 6, 2 # No. of cards in deck
+
+    p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
     bullet = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
     claim = [0, 0, 0, 0]
+
     round_card = card_name[randint(0, 3)]
 
+    # Generate Cards
     for i in range(20):
         r = randint(0, 19 - i)
         if r < cq and cq > 0:
@@ -81,6 +82,7 @@ def game():
     running = True
     debug_output = True
     
+    # During Round
     while running:
         current_time = pygame.time.get_ticks()
         
