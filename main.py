@@ -51,13 +51,14 @@ def game():
 
     round = 0
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    card_name = [" Queen", " King ", " Ace  ", " Joker"]
+    card_name = ["Queen", "King", "Ace", "Joker"]
     cq = 6
     ck = 6
     ca = 6
     cj = 2
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
+    bullet = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
     claim = [0, 0, 0, 0]
     round_card = card_name[randint(0, 3)]
 
@@ -102,6 +103,7 @@ def game():
                 else:
                     print(send[(round - 1) % 4])
                 debug_output = False
+                
             for i in range(4):
                 current_cards = pygame.Rect(0, i * 65, 400, 50)
                 card_text = "You have " + str(p[0][i]) + card_name[i]
@@ -110,13 +112,14 @@ def game():
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
-                send_card_text = "Send " + str(send[0][i]) + card_name[i] + " out"
+                send_card_text = f"Send {send[0][i]} {card_name[i]} out"
+
                 prev_round_text = "This is the first round"
                 if round != 0:
                     prev_round_text = f"Previous player sent {sum(send[3])} cards, claimed {claim[3]} to be {round_card}"
+
                 prev_cards = pygame.Rect(screen_width-800, 150, 300, 45)
                 dbwt(screen, prev_cards, prev_round_text, 45, "white", "black", 10, align="left")
-
 
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
