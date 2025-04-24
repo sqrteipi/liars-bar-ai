@@ -2,7 +2,7 @@
 
 # Modules
 from func import dbwt
-from random import randint
+from random import randint, shuffle
 import pygame
 import time
 
@@ -100,10 +100,7 @@ def game():
         if round % 4 == 0:
             claim[0] = 0
             if debug_output:
-                if round == 0:
-                    print("No previous cards!")
-                else:
-                    print(send[(round - 1) % 4])
+                print(send)
                 debug_output = False
                 
             for i in range(4):
@@ -153,8 +150,8 @@ def game():
             send_button = pygame.Rect(screen_width - 800, 60, 300, 80)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
-                send[0] = [0, 0, 0, 0] # Reset
                 round += 1
+                send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
             else:
@@ -163,20 +160,27 @@ def game():
             liar_button = pygame.Rect(screen_width - 400, 60, 300, 80)
 
             if liar_button.collidepoint(mouse_pos) and mouse_click[0] and round != 0:
-                send[0] = [0, 0, 0, 0] # Reset
                 round += 1
+                send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
             elif liar_button.collidepoint(mouse_pos) and round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
             elif round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "white", 10)
             else:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray55", 10)
-            
         else:
             debug_output = True
-            print(send[(round - 1) % 4])
+            rem = [i for i, count in enumerate(p[round % 4]) for _ in range(count)]
+            shuffle(rem)
+            if len(rem) > 0:
+                obt = randint(1, min(3, len(rem)))
+                for i in range(obt):
+                    send[round % 4][rem[i]] += 1
+                    p[round % 4][rem[i]] -= 1
+            
+            send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
             round += 1
-
+        
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
