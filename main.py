@@ -150,7 +150,7 @@ def game():
                 else:
                     dbwt(screen, card_decrease_button, "-1", 30, "black", "gray55", 10)
                 
-            send_button = pygame.Rect(screen_width - 800, 60, 800, 50)
+            send_button = pygame.Rect(screen_width - 800, 60, 300, 80)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
                 send[0] = [0, 0, 0, 0] # Reset
@@ -159,6 +159,18 @@ def game():
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
             else:
                 dbwt(screen, send_button, "Send", 30, "black", "white", 10)
+                
+            liar_button = pygame.Rect(screen_width - 400, 60, 300, 80)
+
+            if liar_button.collidepoint(mouse_pos) and mouse_click[0] and round != 0:
+                send[0] = [0, 0, 0, 0] # Reset
+                round += 1
+            elif liar_button.collidepoint(mouse_pos) and round != 0:
+                dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
+            elif round != 0:
+                dbwt(screen, liar_button, "Liar!", 30, "black", "white", 10)
+            else:
+                dbwt(screen, liar_button, "Liar!", 30, "black", "gray55", 10)
             
         else:
             debug_output = True
