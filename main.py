@@ -133,7 +133,10 @@ def game():
     cj = 2
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
-    
+    round_card = card_name[randint(0, 3)]
+    prev_sent_amount = 0
+    prev_claim_amount = 0
+
     for i in range(20):
         r = randint(0, 19 - i)
         if r < cq and cq > 0:
@@ -237,9 +240,12 @@ def game():
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
-                send_queen_text = "Send " + str(send[0][i]) + card_name[i] + " out"
+                send_card_text = "Send " + str(send[0][i]) + card_name[i] + " out"
+                prev_round_text = "This is the first round"
+                if round != 0:
+                    prev_round_text = f"Previous player sent {prev_sent_amount} cards, claimed {prev_claim_amount} to be {round_card}"
 
-                dbwt(screen, card_count_button, send_queen_text, 30, "black", "gray69", 10)
+                dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
                 if p[0][i] > 0 and sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
