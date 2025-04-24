@@ -108,7 +108,7 @@ def game():
                 
             for i in range(4):
                 current_cards = pygame.Rect(0, i * 65, 400, 50)
-                card_text = "You have " + str(p[0][i]) + card_name[i]
+                card_text = f"You have {str(p[0][i])} {card_name[i]}"
                 dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
                 
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
@@ -125,11 +125,10 @@ def game():
 
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
-                if p[0][i] > 0 and sum(send[0]) < 3:
+                if p[0][i] > 0 and 0 < sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
                         send[0][i] += 1
                         p[0][i] -= 1
-                        textbox_active = False
                         last_button_time = current_time
                     elif card_increase_button.collidepoint(mouse_pos):
                         dbwt(screen, card_increase_button, "+1", 30, "black", "gray69", 10)
@@ -150,7 +149,7 @@ def game():
                 else:
                     dbwt(screen, card_decrease_button, "-1", 30, "black", "gray55", 10)
                 
-            send_button = pygame.Rect(screen_width-800, 60, 800, 50)
+            send_button = pygame.Rect(screen_width - 800, 60, 800, 50)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0]:
                 round += 1
