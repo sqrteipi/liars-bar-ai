@@ -117,10 +117,10 @@ def game():
 
                 prev_round_text = "This is the first round"
                 if round != 0:
-                    prev_round_text = f"Previous player sent {sum(send[3])} cards, claimed {claim[3]} to be {round_card}"
+                    prev_round_text = f"Previous player sent {sum(send[3])} cards that claimed to be {round_card}"
 
                 prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
-                dbwt(screen, prev_cards, prev_round_text, 45, "white", "black", 10, align="left")
+                dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
 
                 
                 if p[0][i] > 0 and sum(send[0]) < 3:
