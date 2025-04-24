@@ -57,9 +57,8 @@ def game():
     cj = 2
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
+    claim = [0, 0, 0, 0]
     round_card = card_name[randint(0, 3)]
-    prev_sent_amount = 0
-    prev_claim_amount = 0
 
     for i in range(20):
         r = randint(0, 19 - i)
@@ -94,6 +93,8 @@ def game():
         screen.fill("black")
         
         if round % 4 == 0:
+            round_card = card_name[randint(0, 3)]
+            claim[0] = 0
             if debug_output:
                 if round == 0:
                     print("No previous cards!")
@@ -111,7 +112,10 @@ def game():
                 send_card_text = "Send " + str(send[0][i]) + card_name[i] + " out"
                 prev_round_text = "This is the first round"
                 if round != 0:
-                    prev_round_text = f"Previous player sent {prev_sent_amount} cards, claimed {prev_claim_amount} to be {round_card}"
+                    prev_round_text = f"Previous player sent {sum(send[3])} cards, claimed {claim[3]} to be {round_card}"
+                prev_cards = pygame.Rect(screen_width-800, 150, 300, 45)
+                dbwt(screen, prev_cards, prev_round_text, 45, "white", "black", 10, align="left")
+
 
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
