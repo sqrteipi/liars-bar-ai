@@ -160,6 +160,21 @@ def game():
             liar_button = pygame.Rect(screen_width - 400, 60, 300, 80)
 
             if liar_button.collidepoint(mouse_pos) and mouse_click[0] and round != 0:
+                
+                screen.fill("black")
+                cur_cards = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
+                cur_round_text = f"Player 4 is a liar!!"
+                dbwt(screen, cur_cards, cur_round_text, 60, "white", "black", 10, align="center")
+                pygame.display.flip()
+                time.sleep(2)
+                
+                screen.fill("black")
+                cur_cards = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
+                cur_round_text = f"You win!!"
+                dbwt(screen, cur_cards, cur_round_text, 60, "white", "black", 10, align="center")
+                pygame.display.flip()
+                time.sleep(2)
+                
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
                 round += 1
             elif liar_button.collidepoint(mouse_pos) and round != 0:
@@ -169,6 +184,8 @@ def game():
             else:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray55", 10)
         else:
+            screen.fill("black")
+            
             debug_output = True
             rem = [i for i, count in enumerate(p[round % 4]) for _ in range(count)]
             shuffle(rem)
@@ -178,7 +195,14 @@ def game():
                     send[round % 4][rem[i]] += 1
                     p[round % 4][rem[i]] -= 1
             
+            cur_cards = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
+            cur_round_text = f"Player {round % 4} sent {sum(send[round % 4])} cards that claimed to be {round_card}"
+            dbwt(screen, cur_cards, cur_round_text, 60, "white", "black", 10, align="center")
+            pygame.display.flip()
+            
             send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+            
+            time.sleep(1)
             round += 1
         
         pygame.display.flip()
