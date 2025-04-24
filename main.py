@@ -57,7 +57,8 @@ def game():
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
-    bullet = [randint(1, 6), randint(1, 6), randint(1, 6), randint(1, 6)]
+    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
+    bullet_used = [0, 0, 0, 0]
     claim = [0, 0, 0, 0]
 
     round_card = card_name[randint(0, 3)]
@@ -114,17 +115,18 @@ def game():
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
+                
                 send_card_text = f"Send {send[0][i]} {card_name[i]} out"
+                dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
                 prev_round_text = "This is the first round"
                 if round != 0:
                     prev_round_text = f"Previous player sent {sum(send[3])} cards, claimed {claim[3]} to be {round_card}"
 
-                prev_cards = pygame.Rect(screen_width-800, 150, 300, 45)
+                prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
                 dbwt(screen, prev_cards, prev_round_text, 45, "white", "black", 10, align="left")
 
-                dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
-
+                
                 if p[0][i] > 0 and sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
                         send[0][i] += 1
