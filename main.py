@@ -98,7 +98,6 @@ def game():
         screen.fill("black")
         
         if round % 4 == 0:
-            round_card = card_name[randint(0, 3)]
             claim[0] = 0
             if debug_output:
                 if round == 0:
@@ -115,7 +114,7 @@ def game():
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
-                
+
                 send_card_text = f"Send {send[0][i]} {card_name[i]} out"
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
@@ -154,6 +153,7 @@ def game():
             send_button = pygame.Rect(screen_width - 800, 60, 800, 50)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
+                send[0] = [0, 0, 0, 0] # Reset
                 round += 1
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
