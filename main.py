@@ -3,6 +3,7 @@
 # Modules
 from func import dbwt
 from random import randint, shuffle
+import math
 import pygame
 import time
 
@@ -61,7 +62,8 @@ def game():
     bullet_used = [0, 0, 0, 0]
     claim = [0, 0, 0, 0]
 
-    round_card = card_name[randint(0, 3)]
+    round_card = card_name[randint(0, 2)]
+    prev_round_card = card_name[randint(0, 2)]
 
     # Generate Cards
     for i in range(20):
@@ -102,12 +104,16 @@ def game():
             if debug_output:
                 print(send)
                 debug_output = False
+            
+            round_card_button = pygame.Rect(0, 260, 400, 50)
+            round_card_text = f"Current Round Card: {round_card}"
+            dbwt(screen, round_card_button, round_card_text, 65, "white", "black", 10, align="left")
                 
             for i in range(4):
                 current_cards = pygame.Rect(0, i * 65, 400, 50)
                 card_text = f"You have {str(p[0][i])} {card_name[i]}"
                 dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
-                
+
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
@@ -117,7 +123,7 @@ def game():
 
                 prev_round_text = "This is the first round"
                 if round != 0:
-                    prev_round_text = f"Previous player sent {sum(send[3])} cards that claimed to be {round_card}"
+                    prev_round_text = f"Player 4 sent {sum(send[3])} cards that claimed to be {prev_round_card}"
 
                 prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
                 dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
@@ -151,6 +157,7 @@ def game():
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+                prev_round_card = round_card
                 round += 1
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
@@ -176,7 +183,7 @@ def game():
                 time.sleep(2)
                 
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
-                round += 1
+                round = math.ceil(round / 4) - 1
             elif liar_button.collidepoint(mouse_pos) and round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
             elif round != 0:
@@ -196,9 +203,11 @@ def game():
                     p[round % 4][rem[i]] -= 1
             
             cur_cards = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
-            cur_round_text = f"Player {round % 4} sent {sum(send[round % 4])} cards that claimed to be {round_card}"
+            cur_round_text = f"Player {round % 4} sent {sum(send[(round - 1) % 4])} cards that claimed to be {round_card}"
             dbwt(screen, cur_cards, cur_round_text, 60, "white", "black", 10, align="center")
             pygame.display.flip()
+            if (round % 4 == 3):
+                round_card = card_name[randint(0, 2)]
             
             send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
             
