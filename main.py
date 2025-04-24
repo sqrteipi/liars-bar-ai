@@ -125,7 +125,7 @@ def game():
 
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
 
-                if p[0][i] > 0 and 0 < sum(send[0]) < 3:
+                if p[0][i] > 0 and sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
                         send[0][i] += 1
                         p[0][i] -= 1
@@ -151,7 +151,7 @@ def game():
                 
             send_button = pygame.Rect(screen_width - 800, 60, 800, 50)
 
-            if send_button.collidepoint(mouse_pos) and mouse_click[0]:
+            if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
                 round += 1
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
