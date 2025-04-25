@@ -143,7 +143,7 @@ def game():
     debug_output = True
     
     # During Round
-    while alive.count(1) > 1:
+    while True:
         current_time = pygame.time.get_ticks()
         
         for event in pygame.event.get():
@@ -269,7 +269,6 @@ def game():
         ####################################################################################################
 
         else:
-            screen.fill("black")
             cur_player = round % 4
 
             debug_output = True
