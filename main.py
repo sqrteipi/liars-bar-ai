@@ -81,10 +81,7 @@ def start():
 # Main Program
 
 def main():
-    global easter_egg
-    global bullet
-    global bullet_used
-    global alive
+    global easter_egg, bullet, bullet_used, alive
 
     easter_egg = False
     bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
@@ -101,7 +98,7 @@ def main():
 
 # Main game
 def game():
-    global prv_send, prv_player, cur_send, cur_player
+    global prv_send, prv_player, cur_send, cur_player, round_card
     
     pygame.key.set_repeat(200, 30)
 
@@ -244,7 +241,7 @@ def game():
             liar_button = pygame.Rect(screen_width - 400, 60, 300, 80)
 
             if liar_button.collidepoint(mouse_pos) and mouse_click[0] and round != 0:
-                # challenge()
+                challenge()
                 return None
 
             elif liar_button.collidepoint(mouse_pos) and round != 0:
@@ -292,7 +289,24 @@ def game():
         pygame.display.flip()
 
 def challenge():
-    pass
+    screen.fill("black")
+    b, a = prv_player, cur_player
+    challenge_title = "Challenged"
+    challenge_title_box = pygame.Rect(screen_width // 2 - 250, 0, 500, 85)
+    dbwt(screen, challenge_title_box, challenge_title, 65, "white", "black", 10, align="center")
+    challenge_player = f"Player {a}"
+    challenged_player = f"Player {b}"
+    if a == 0:
+        challenge_player = "You"
+    if b == 0:
+        challenged_player = "You"
+    challenge_player_box = pygame.Rect(screen_width // 2 - 550, 0, 300, 85)
+    challenged_player_box = pygame.Rect(screen_width // 2 + 250, 0, 300, 85)
+    dbwt(screen, challenge_player_box, challenge_player, 65, "white", "black", 10, align="left")
+    dbwt(screen, challenged_player_box, challenged_player, 65, "white", "black", 10, align="right")
+    pygame.display.flip()
+    time.sleep(3)
+    return
 
 main()
 
