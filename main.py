@@ -8,6 +8,8 @@ import pygame
 import time
 
 global easter_egg
+global bullet
+global bullet_used
 
 # Initialization
 pygame.init()
@@ -23,6 +25,8 @@ easter_egg = False
 # Main Screen
 def main():
     easter_egg = False
+    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
+    bullet_used = [0, 0, 0, 0]
     
     while True:
         for event in pygame.event.get():
@@ -42,7 +46,7 @@ def main():
                 dbwt(screen, start_button, "Start", 65, "black", "gray69", 10)
             else:
                 dbwt(screen, start_button, "Start", 65, "black", "white", 10)
-            
+        
         pygame.display.flip()
         dt = clock.tick(60) / 1000
 
@@ -58,8 +62,7 @@ def game():
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
     status = [1, 1, 1, 1, 1]
-    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
-    bullet_used = [0, 0, 0, 0]
+    
     claim = [0, 0, 0, 0]
 
     queen_img = pygame.image.load("img-queen.png")
