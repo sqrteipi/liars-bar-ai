@@ -4,6 +4,7 @@
 from func import dbwt
 from random import randint, shuffle
 import math
+import os
 import pygame
 import time
 
@@ -74,10 +75,12 @@ def game():
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 
-    queen_img = pygame.image.load("img-queen.png")
-    king_img = pygame.image.load("img-king.png")
-    ace_img = pygame.image.load("img-ace.png")
-    joker_img = pygame.image.load("img-joker.png")
+    queen_img = pygame.image.load(os.path.join("assets", "img-queen.png"))
+    king_img = pygame.image.load(os.path.join("assets", "img-king.png"))
+    ace_img = pygame.image.load(os.path.join("assets", "img-ace.png"))
+    joker_img = pygame.image.load(os.path.join("assets", "img-joker.png"))
+
+    img_arr = [queen_img, king_img, ace_img, joker_img]
 
     round_card = card_name[randint(0, 2)]
     # prev_round_card = card_name[randint(0, 2)]
@@ -121,16 +124,16 @@ def game():
                 print(send)
                 debug_output = False
             
-            round_card_button = pygame.Rect(0, 260, 400, 50)
+            round_card_button = pygame.Rect(0, 350, 400, 50)
             round_card_text = f"Current Round Card: {round_card}"
             dbwt(screen, round_card_button, round_card_text, 65, "white", "black", 10, align="left")
                 
             for i in range(4):
-                # screen.blit(queen_img, 0, i*65)
-                # blit it after found method to smaller the image size
-                current_cards = pygame.Rect(0, i * 65, 400, 50)
-                card_text = f"You have {str(p[0][i])} {card_name[i]}"
-                dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
+                screen.blit(img_arr[i], (10+210*(i % 2), 10+155*(i // 2)))
+
+                # current_cards = pygame.Rect(0, i * 65, 400, 50)
+                # card_text = f"You have {str(p[0][i])} {card_name[i]}"
+                # dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
 
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
@@ -138,14 +141,6 @@ def game():
 
                 send_card_text = f"Send {send[0][i]} {card_name[i]} out"
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
-
-                prev_round_text = "This is the first round"
-                if round != 0:
-                    prev_round_text = f"Player 4 sent {sum(send[3])} cards that claimed to be {prev_round_card}"
-
-                prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
-                dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
-
                 
                 if p[0][i] > 0 and sum(send[0]) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
@@ -171,6 +166,13 @@ def game():
                 else:
                     dbwt(screen, card_decrease_button, "-1", 30, "black", "gray55", 10)
                 
+            prev_round_text = "This is the first round"
+            if round != 0:
+                prev_round_text = f"Player 4 sent {sum(send[3])} cards that claimed to be {prev_round_card}"
+
+            prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
+            dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
+            
             send_button = pygame.Rect(screen_width - 800, 60, 300, 80)
 
             if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
