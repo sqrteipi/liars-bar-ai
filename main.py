@@ -1,8 +1,8 @@
 # https://www.entertainment14.net/blog/post/110995335-%e9%a8%99%e5%ad%90%e9%85%92%e5%90%a7-liars-bar-%e6%96%b0%e6%89%8b%e9%81%8a%e7%8e%a9%e6%8c%87%e5%8d%97
 
 # Modules
-from func import dbwt
-from random import randint, shuffle
+from func import *
+from random import shuffle
 import math
 import os
 import pygame
@@ -226,7 +226,7 @@ def game():
                     p[round % 4][rem[i]] -= 1
             
             sub = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
-            cur_round_text = f"Player {round % 4} sent {sum(cur_send)} cards that claimed to be {round_card}"
+            cur_round_text = f"Player {round % 4 + 1} sent {sum(cur_send)} cards that claimed to be {round_card}"
             dbwt(screen, sub, cur_round_text, 60, "white", "black", 10, align="center")
             pygame.display.flip()
             
