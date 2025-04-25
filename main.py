@@ -131,9 +131,9 @@ def game():
             for i in range(4):
                 screen.blit(img_arr[i], (10+210*(i % 2), 10+155*(i // 2)))
 
-                # current_cards = pygame.Rect(0, i * 65, 400, 50)
-                # card_text = f"You have {str(p[0][i])} {card_name[i]}"
-                # dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
+                current_cards = pygame.Rect(130+210*(i % 2), 45+155*(i // 2), 80, 65)
+                card_text = f"x{str(p[0][i])}"
+                dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
 
                 card_count_button = pygame.Rect(screen_width // 2 - 575 + i * 300, screen_height // 2 + 150, 200, 100)
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
