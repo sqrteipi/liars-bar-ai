@@ -10,6 +10,7 @@ import time
 global easter_egg
 global bullet
 global bullet_used
+global alive
 
 # Initialization
 pygame.init()
@@ -26,7 +27,8 @@ def main():
     easter_egg = False
     bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
     bullet_used = [0, 0, 0, 0]
-    
+    alive = [0, 0, 0, 0]
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,7 +71,7 @@ def game():
     joker_img = pygame.image.load("img-joker.png")
 
     round_card = card_name[randint(0, 2)]
-    prev_round_card = card_name[randint(0, 2)]
+    # prev_round_card = card_name[randint(0, 2)]
 
     # Generate Cards
     for i in range(20):
@@ -99,7 +101,7 @@ def game():
             if event.type == pygame.QUIT:
                 quit()
 
-        keys = pygame.key.get_pressed()
+        # keys = pygame.key.get_pressed()
         mouse_pos = pygame.mouse.get_pos()
         mouse_click = pygame.mouse.get_pressed()
 
