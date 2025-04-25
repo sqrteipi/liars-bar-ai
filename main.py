@@ -237,18 +237,25 @@ def game():
             cur_player = round % 4
 
             debug_output = True
-            rem = [i for i, count in enumerate(p[round % 4]) for _ in range(count)]
-            shuffle(rem)
-            if len(rem) > 0:
+
+            if alive[cur_player] == 0:
+                cur_round_text = f"Player {cur_player + 1} sent all his cards already"
+            else :
+                rem = [i for i, count in enumerate(p[round % 4]) for _ in range(count)]
+                shuffle(rem)
                 obt = randint(1, min(3, len(rem)))
                 for i in range(obt):
                     cur_send[rem[i]] += 1
                     p[round % 4][rem[i]] -= 1
-            
+                
+                cur_round_text = f"Player {cur_player + 1} sent {sum(cur_send)} cards that claimed to be {round_card}"
+
             sub = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
-            cur_round_text = f"Player {cur_player + 1} sent {sum(cur_send)} cards that claimed to be {round_card}"
             dbwt(screen, sub, cur_round_text, 60, "white", "black", 10, align="center")
             pygame.display.flip()
+            
+            if sum(p[round % 4]) == 0:
+                alive[round % 4] = 0
             
             prv_send = cur_send.copy() 
             cur_send = [0, 0, 0, 0] # Reset

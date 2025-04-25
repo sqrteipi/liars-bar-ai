@@ -3,7 +3,7 @@ import secrets
 
 # Generate integer in [l, r] (closed interval)
 def randint(l, r):
-    return l+secrets.randbelow(r-l+1)
+    return l + secrets.randbelow(r - l + 1)
 
 # Drawing button with text (modified to handle leading newlines)
 def dbwt(screen, button_rect, text, font_size, text_color, button_color, border, align="center", multiline=False, char_spacing=0):
