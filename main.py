@@ -62,6 +62,11 @@ def game():
     bullet_used = [0, 0, 0, 0]
     claim = [0, 0, 0, 0]
 
+    queen_img = pygame.image.load("img-queen.png")
+    king_img = pygame.image.load("img-king.png")
+    ace_img = pygame.image.load("img-ace.png")
+    joker_img = pygame.image.load("img-joker.png")
+
     round_card = card_name[randint(0, 2)]
     prev_round_card = card_name[randint(0, 2)]
 
@@ -110,6 +115,8 @@ def game():
             dbwt(screen, round_card_button, round_card_text, 65, "white", "black", 10, align="left")
                 
             for i in range(4):
+                # screen.blit(queen_img, 0, i*65)
+                # blit it after found method to smaller the image size
                 current_cards = pygame.Rect(0, i * 65, 400, 50)
                 card_text = f"You have {str(p[0][i])} {card_name[i]}"
                 dbwt(screen, current_cards, card_text, 65, "white", "black", 10, align="left")
