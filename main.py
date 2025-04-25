@@ -22,13 +22,19 @@ current_state = "main"
 pygame.display.set_caption("Liar's Bar (v0.0r)")
 easter_egg = False
 
-# Main Screen
+# Main Program
+
 def main():
     easter_egg = False
     bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
     bullet_used = [0, 0, 0, 0]
-    alive = [0, 0, 0, 0]
+    alive = [1, 1, 1, 1]
 
+    start()
+    game()
+
+# Start Screen
+def start():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -42,14 +48,13 @@ def main():
 
             start_button = pygame.Rect(screen_width // 2 - 200, screen_height // 2 - 50, 400, 100)
             if start_button.collidepoint(mouse_pos) and mouse_click[0]:
-                game()
+                return None
             elif start_button.collidepoint(mouse_pos):
                 dbwt(screen, start_button, "Start", 65, "black", "gray69", 10)
             else:
                 dbwt(screen, start_button, "Start", 65, "black", "white", 10)
         
         pygame.display.flip()
-        dt = clock.tick(60) / 1000
 
 # Main game
 def game():
