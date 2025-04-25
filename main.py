@@ -17,7 +17,6 @@ screen_width = 1280
 screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
-dt = 0
 current_state = "main"
 pygame.display.set_caption("Liar's Bar (v0.0r)")
 easter_egg = False
@@ -61,7 +60,6 @@ def game():
 
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    status = [1, 1, 1, 1, 1]
     
     claim = [0, 0, 0, 0]
 
@@ -225,7 +223,6 @@ def game():
             round += 1
         
         pygame.display.flip()
-        dt = clock.tick(60) / 1000
 
 main()
 
