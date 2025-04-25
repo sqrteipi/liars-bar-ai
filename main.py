@@ -15,13 +15,19 @@ screen_height = 720
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 current_state = "main"
-pygame.display.set_caption("Liar's Bar (v0.0r)")
+pygame.display.set_caption("Liar's Bar (v0.1r)")
 easter_egg = False
 
 # Start Screen
 
 def start():
+
+    bullet = 6
+    last_button_time = 0
+
     while True:
+
+        current_time = pygame.time.get_ticks()        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -32,15 +38,44 @@ def start():
 
             screen.fill("black")
 
-            start_button = pygame.Rect(screen_width // 2 - 200, screen_height // 2 - 50, 400, 100)
+            start_button = pygame.Rect(screen_width // 2 - 200, screen_height // 2 - 250, 400, 100)
             if start_button.collidepoint(mouse_pos) and mouse_click[0]:
                 return None
             elif start_button.collidepoint(mouse_pos):
                 dbwt(screen, start_button, "Start", 65, "black", "gray69", 10)
             else:
                 dbwt(screen, start_button, "Start", 65, "black", "white", 10)
+            
+            bullet_count_button = pygame.Rect(screen_width // 2 - 175, screen_height // 2 + 150, 300, 100)
+            bullet_increase_button = pygame.Rect(screen_width // 2 + 125, screen_height // 2 + 150, 50, 50)
+            bullet_decrease_button = pygame.Rect(screen_width // 2 + 125, screen_height // 2 + 200, 50, 50)
+
+            send_card_text = f"shoot {bullet} bullets to lose"
+            dbwt(screen, bullet_count_button, send_card_text, 30, "black", "gray69", 10)
+
+            if bullet < 9:
+                if bullet_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
+                    bullet += 1
+                    last_button_time = current_time
+                elif bullet_increase_button.collidepoint(mouse_pos):
+                    dbwt(screen, bullet_increase_button, "+1", 30, "black", "gray69", 10)
+                else:
+                    dbwt(screen, bullet_increase_button, "+1", 30, "black", "white", 10)
+            else:
+                dbwt(screen, bullet_increase_button, "+1", 30, "black", "gray55", 10)
+
+            if bullet > 1:
+                if bullet_decrease_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
+                    bullet -= 1
+                    last_button_time = current_time
+                elif bullet_decrease_button.collidepoint(mouse_pos):
+                    dbwt(screen, bullet_decrease_button, "-1", 30, "black", "gray69", 10)
+                else:
+                    dbwt(screen, bullet_decrease_button, "-1", 30, "black", "white", 10)
+            else:
+                dbwt(screen, bullet_decrease_button, "-1", 30, "black", "gray55", 10)
         
-        pygame.display.flip()
+            pygame.display.flip()
 
 # Main Program
 
