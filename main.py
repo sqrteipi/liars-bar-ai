@@ -58,6 +58,9 @@ def main():
 
     while alive.count(1) > 1:
         game()
+        for i in range(4):
+            if alive[i] == 0:
+                alive[i] = 1
 
 # Main game
 def game():
@@ -199,12 +202,14 @@ def game():
                 
                 send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
                 round = math.ceil(round / 4) - 1
+                
             elif liar_button.collidepoint(mouse_pos) and round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
             elif round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "white", 10)
             else:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray55", 10)
+            
         else:
             screen.fill("black")
             
@@ -217,12 +222,10 @@ def game():
                     send[round % 4][rem[i]] += 1
                     p[round % 4][rem[i]] -= 1
             
-            cur_cards = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
+            sub = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
             cur_round_text = f"Player {round % 4} sent {sum(send[(round - 1) % 4])} cards that claimed to be {round_card}"
-            dbwt(screen, cur_cards, cur_round_text, 60, "white", "black", 10, align="center")
+            dbwt(screen, sub, cur_round_text, 60, "white", "black", 10, align="center")
             pygame.display.flip()
-            if (round % 4 == 3):
-                round_card = card_name[randint(0, 2)]
             
             send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
             
