@@ -22,18 +22,8 @@ current_state = "main"
 pygame.display.set_caption("Liar's Bar (v0.0r)")
 easter_egg = False
 
-# Main Program
-
-def main():
-    easter_egg = False
-    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
-    bullet_used = [0, 0, 0, 0]
-    alive = [1, 1, 1, 1]
-
-    start()
-    game()
-
 # Start Screen
+
 def start():
     while True:
         for event in pygame.event.get():
@@ -56,6 +46,19 @@ def start():
         
         pygame.display.flip()
 
+# Main Program
+
+def main():
+    easter_egg = False
+    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
+    bullet_used = [0, 0, 0, 0]
+    alive = [1, 1, 1, 1]
+
+    start()
+
+    while alive.count(1) > 1:
+        game()
+
 # Main game
 def game():
     pygame.key.set_repeat(200, 30)
@@ -67,8 +70,6 @@ def game():
 
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
     send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    
-    claim = [0, 0, 0, 0]
 
     queen_img = pygame.image.load("img-queen.png")
     king_img = pygame.image.load("img-king.png")
@@ -113,7 +114,6 @@ def game():
         screen.fill("black")
         
         if round % 4 == 0:
-            claim[0] = 0
             if debug_output:
                 print(send)
                 debug_output = False
