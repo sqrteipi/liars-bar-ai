@@ -101,7 +101,8 @@ def main():
 
 # Main game
 def game():
-
+    global prv_send, prv_player, cur_send, cur_player
+    
     pygame.key.set_repeat(200, 30)
 
     round = 0
@@ -301,6 +302,9 @@ def game():
             round += 1
         
         pygame.display.flip()
+
+def challenge():
+    pass
 
 main()
 
