@@ -98,7 +98,7 @@ def main():
 
 # Main game
 def game():
-    global prv_send, prv_player, cur_send, cur_player, round_card
+    global prv_send, prv_player, cur_send, cur_player, round_idx, round_card, lgun_img, rgun_img
     
     pygame.key.set_repeat(200, 30)
 
@@ -117,10 +117,13 @@ def game():
     king_img = pygame.image.load(os.path.join("assets", "img-king.png"))
     ace_img = pygame.image.load(os.path.join("assets", "img-ace.png"))
     joker_img = pygame.image.load(os.path.join("assets", "img-joker.png"))
+    lgun_img = pygame.image.load(os.path.join("assets", "img-gun-left.png"))
+    rgun_img = pygame.image.load(os.path.join("assets", "img-gun-right.png"))
 
     img_arr = [queen_img, king_img, ace_img, joker_img]
 
-    round_card = card_name[randint(0, 2)]
+    round_idx = randint(0, 2)
+    round_card = card_name[round_idx]
 
     # Generate Cards
     for i in range(20):
@@ -210,7 +213,7 @@ def game():
 
             prev_round_text = "This is the first round"
             if round != 0:
-                prev_round_text = f"Player {prv_player} sent {sum(prv_send)} cards that claimed to be {round_card}"
+                prev_round_text = f"Player {prv_player+1} sent {sum(prv_send)} cards that claimed to be {round_card}"
 
             prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
             dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
@@ -294,8 +297,8 @@ def challenge():
     challenge_title = "Challenged"
     challenge_title_box = pygame.Rect(screen_width // 2 - 250, 0, 500, 85)
     dbwt(screen, challenge_title_box, challenge_title, 65, "white", "black", 10, align="center")
-    challenge_player = f"Player {a}"
-    challenged_player = f"Player {b}"
+    challenge_player = f"Player {a+1}"
+    challenged_player = f"Player {b+1}"
     if a == 0:
         challenge_player = "You"
     if b == 0:
@@ -304,8 +307,28 @@ def challenge():
     challenged_player_box = pygame.Rect(screen_width // 2 + 250, 0, 300, 85)
     dbwt(screen, challenge_player_box, challenge_player, 65, "white", "black", 10, align="left")
     dbwt(screen, challenged_player_box, challenged_player, 65, "white", "black", 10, align="right")
+    dare_text_box = pygame.Rect(screen_width // 2 - 550, screen_height // 2 - 43, 300, 85)
+    dbwt(screen, dare_text_box, "Dare!", 65, "white", "black", 10, align="left")
+    dare_text_box = pygame.Rect(screen_width // 2 + 150, screen_height // 2 - 43, 400, 85)
+    dbwt(screen, dare_text_box, f"They claimed that they sent {sum(prv_send)} {round_card}", 65, "white", "black", 10, align="right")
     pygame.display.flip()
-    time.sleep(3)
+    time.sleep(2)
+
+    if prv_send[round_idx] == sum(prv_send):
+        win_text_box = pygame.Rect(screen_width // 2 - 200, screen_height // 2 + 215, 400, 70)
+        dbwt(screen, win_text_box, f"Player {b+1} is a liar!", 70, "white", "black", 10, align="center")
+        screen.blit(rgun_img, (screen_width // 2 + 300, screen_height // 2 + 100))
+        bullet_used[b] += 1
+        pygame.display.flip()
+        time.sleep(1)
+    else:
+        lose_text_box = pygame.Rect(screen_width // 2 - 200, screen_height // 2 + 215, 400, 70)
+        dbwt(screen, lose_text_box, f"Player {b+1} is not a liar!", 70, "white", "black", 10, align="center")
+        screen.blit(lgun_img, (screen_width // 2 - 400, screen_height // 2 + 100))
+        bullet_used[a] += 1
+        pygame.display.flip()
+        time.sleep(1)
+
     return
 
 main()

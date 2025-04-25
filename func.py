@@ -5,7 +5,7 @@ import secrets
 def randint(l, r):
     return l + secrets.randbelow(r - l + 1)
 
-# Drawing button with text (modified to handle leading newlines)
+# Drawing button with text (modified to handle leading newlines and right alignment)
 def dbwt(screen, button_rect, text, font_size, text_color, button_color, border, align="center", multiline=False, char_spacing=0):
     font = pygame.font.Font(None, font_size)
     pygame.draw.rect(screen, button_color, button_rect)
@@ -55,11 +55,18 @@ def dbwt(screen, button_rect, text, font_size, text_color, button_color, border,
                 text_rect = text_surface.get_rect()
                 if align == "left":
                     text_rect.topleft = (button_rect.left + border, button_rect.top + border + i * font_size)
+                elif align == "right":
+                    text_rect.topright = (button_rect.right - border, button_rect.top + border + i * font_size)
                 else:
                     text_rect.center = (button_rect.centerx, button_rect.top + border + i * font_size)
                 screen.blit(text_surface, text_rect)
             else:
-                x_pos = button_rect.left + border if align == "left" else button_rect.centerx - sum(font.render(c, True, text_color).get_width() + char_spacing for c in line)/2 + char_spacing/2
+                if align == "left":
+                    x_pos = button_rect.left + border
+                elif align == "right":
+                    x_pos = button_rect.right - border - sum(font.render(c, True, text_color).get_width() + char_spacing for c in line) + char_spacing
+                else:
+                    x_pos = button_rect.centerx - sum(font.render(c, True, text_color).get_width() + char_spacing for c in line)/2 + char_spacing/2
                 y_pos = button_rect.top + border + i * font_size
                 for char in line:
                     char_surface = font.render(char, True, text_color)
@@ -71,12 +78,19 @@ def dbwt(screen, button_rect, text, font_size, text_color, button_color, border,
             text_rect = text_surface.get_rect()
             if align == "left":
                 text_rect.topleft = (button_rect.left + border, button_rect.top + border)
+            elif align == "right":
+                text_rect.topright = (button_rect.right - border, button_rect.top + border)
             else:
                 text_rect.center = button_rect.center
             screen.blit(text_surface, text_rect)
         else:
-            x_pos = button_rect.left + border if align == "left" else button_rect.centerx - sum(font.render(c, True, text_color).get_width() + char_spacing for c in text)/2 + char_spacing/2
-            y_pos = button_rect.top + border if align == "left" else button_rect.centery - font.get_height()/2
+            if align == "left":
+                x_pos = button_rect.left + border
+            elif align == "right":
+                x_pos = button_rect.right - border - sum(font.render(c, True, text_color).get_width() + char_spacing for c in text) + char_spacing
+            else:
+                x_pos = button_rect.centerx - sum(font.render(c, True, text_color).get_width() + char_spacing for c in text)/2 + char_spacing/2
+            y_pos = button_rect.top + border if align == "left" or align == "right" else button_rect.centery - font.get_height()/2
             for char in text:
                 char_surface = font.render(char, True, text_color)
                 screen.blit(char_surface, (x_pos, y_pos))
