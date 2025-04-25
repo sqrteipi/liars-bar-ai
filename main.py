@@ -8,11 +8,6 @@ import os
 import pygame
 import time
 
-global easter_egg
-global bullet
-global bullet_used
-global alive
-
 # Initialization
 pygame.init()
 screen_width = 1280
@@ -50,6 +45,11 @@ def start():
 # Main Program
 
 def main():
+    global easter_egg
+    global bullet
+    global bullet_used
+    global alive
+
     easter_egg = False
     bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
     bullet_used = [0, 0, 0, 0]
@@ -65,6 +65,7 @@ def main():
 
 # Main game
 def game():
+
     pygame.key.set_repeat(200, 30)
 
     round = 0
@@ -104,11 +105,10 @@ def game():
             p[i//5][3] += 1
 
     last_button_time = 0
-    running = True
     debug_output = True
     
     # During Round
-    while running:
+    while alive.count(1) > 1:
         current_time = pygame.time.get_ticks()
         
         for event in pygame.event.get():
