@@ -73,7 +73,8 @@ def game():
     cq, ck, ca, cj = 6, 6, 6, 2 # No. of cards in deck
 
     p = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]] # No. of cards of each type for every player
-    send = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    prv_send = [-1, -1, -1, -1]
+    cur_send = [0, 0, 0, 0]
 
     queen_img = pygame.image.load(os.path.join("assets", "img-queen.png"))
     king_img = pygame.image.load(os.path.join("assets", "img-king.png"))
@@ -83,7 +84,6 @@ def game():
     img_arr = [queen_img, king_img, ace_img, joker_img]
 
     round_card = card_name[randint(0, 2)]
-    # prev_round_card = card_name[randint(0, 2)]
 
     # Generate Cards
     for i in range(20):
@@ -121,7 +121,7 @@ def game():
         
         if round % 4 == 0:
             if debug_output:
-                print(send)
+                print(prv_send, cur_send)
                 debug_output = False
             
             round_card_button = pygame.Rect(0, 350, 400, 50)
@@ -139,12 +139,12 @@ def game():
                 card_increase_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 150, 50, 50)
                 card_decrease_button = pygame.Rect(screen_width // 2 - 375 + i * 300, screen_height // 2 + 200, 50, 50)
 
-                send_card_text = f"Send {send[0][i]} {card_name[i]} out"
+                send_card_text = f"Send {cur_send[i]} {card_name[i]} out"
                 dbwt(screen, card_count_button, send_card_text, 30, "black", "gray69", 10)
                 
-                if p[0][i] > 0 and sum(send[0]) < 3:
+                if p[0][i] > 0 and sum(cur_send) < 3:
                     if card_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
-                        send[0][i] += 1
+                        cur_send[i] += 1
                         p[0][i] -= 1
                         last_button_time = current_time
                     elif card_increase_button.collidepoint(mouse_pos):
@@ -154,9 +154,9 @@ def game():
                 else:
                     dbwt(screen, card_increase_button, "+1", 30, "black", "gray55", 10)
 
-                if send[0][i] > 0:
+                if cur_send[i] > 0:
                     if card_decrease_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
-                        send[0][i] -= 1
+                        cur_send[i] -= 1
                         p[0][i] += 1
                         last_button_time = current_time
                     elif card_decrease_button.collidepoint(mouse_pos):
@@ -168,16 +168,15 @@ def game():
                 
             prev_round_text = "This is the first round"
             if round != 0:
-                prev_round_text = f"Player 4 sent {sum(send[3])} cards that claimed to be {prev_round_card}"
+                prev_round_text = f"Player 4 sent {sum(prv_send)} cards that claimed to be {round_card}"
 
             prev_cards = pygame.Rect(screen_width - 800, 150, 300, 45)
             dbwt(screen, prev_cards, prev_round_text, 40, "white", "black", 10, align="left")
             
             send_button = pygame.Rect(screen_width - 800, 60, 300, 80)
 
-            if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(send[0]) > 0:
-                send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
-                prev_round_card = round_card
+            if send_button.collidepoint(mouse_pos) and mouse_click[0] and sum(cur_send) > 0:
+                prv_send = [0, 0, 0, 0] # Reset
                 round += 1
             elif send_button.collidepoint(mouse_pos):
                 dbwt(screen, send_button, "Send", 30, "black", "gray69", 10)
@@ -202,9 +201,9 @@ def game():
                 pygame.display.flip()
                 time.sleep(2)
                 
-                send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+                prv_send = [0, 0, 0, 0] # Reset
                 round = math.ceil(round / 4) - 1
-                
+
             elif liar_button.collidepoint(mouse_pos) and round != 0:
                 dbwt(screen, liar_button, "Liar!", 30, "black", "gray69", 10)
             elif round != 0:
@@ -221,15 +220,15 @@ def game():
             if len(rem) > 0:
                 obt = randint(1, min(3, len(rem)))
                 for i in range(obt):
-                    send[round % 4][rem[i]] += 1
+                    cur_send[rem[i]] += 1
                     p[round % 4][rem[i]] -= 1
             
             sub = pygame.Rect(screen_width // 2 - 150, screen_height // 2 - 22.5, 300, 45)
-            cur_round_text = f"Player {round % 4} sent {sum(send[(round - 1) % 4])} cards that claimed to be {round_card}"
+            cur_round_text = f"Player {round % 4} sent {sum(cur_send)} cards that claimed to be {round_card}"
             dbwt(screen, sub, cur_round_text, 60, "white", "black", 10, align="center")
             pygame.display.flip()
             
-            send[(round + 3) % 4] = [0, 0, 0, 0] # Reset
+            prv_send = [0, 0, 0, 0] # Reset
             
             time.sleep(1)
             round += 1
