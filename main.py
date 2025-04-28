@@ -20,10 +20,10 @@ pygame.display.set_caption("Liar's Bar (v0.1r)")
 easter_egg = False
 
 # Start Screen
-
+max_bullet = 6
 def start():
 
-    bullet = 6
+    global max_bullet
     last_button_time = 0
 
     while True:
@@ -55,12 +55,12 @@ def start():
         bullet_increase_button = pygame.Rect(screen_width // 2 + 125, screen_height // 2 + 150, 50, 50)
         bullet_decrease_button = pygame.Rect(screen_width // 2 + 125, screen_height // 2 + 200, 50, 50)
 
-        send_card_text = f"shoot {bullet} bullets to lose"
+        send_card_text = f"shoot {max_bullet} bullets to lose"
         dbwt(screen, bullet_count_button, send_card_text, 30, "black", "gray69", 10)
 
-        if bullet < 9:
+        if max_bullet < 9:
             if bullet_increase_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
-                bullet += 1
+                max_bullet += 1
                 last_button_time = current_time
             elif bullet_increase_button.collidepoint(mouse_pos):
                 dbwt(screen, bullet_increase_button, "+1", 30, "black", "gray69", 10)
@@ -69,9 +69,9 @@ def start():
         else:
             dbwt(screen, bullet_increase_button, "+1", 30, "black", "gray55", 10)
 
-        if bullet > 1:
+        if max_bullet > 1:
             if bullet_decrease_button.collidepoint(mouse_pos) and mouse_click[0] and current_time - last_button_time > 167:
-                bullet -= 1
+                max_bullet -= 1
                 last_button_time = current_time
             elif bullet_decrease_button.collidepoint(mouse_pos):
                 dbwt(screen, bullet_decrease_button, "-1", 30, "black", "gray69", 10)
@@ -85,10 +85,10 @@ def start():
 # Main Program
 
 def main():
-    global easter_egg, bullet, bullet_used, alive
+    global easter_egg, bullet, bullet_used, alive, max_bullet
 
     easter_egg = False
-    bullet = [randint(0, 5), randint(0, 5), randint(0, 5), randint(0, 5)]
+    bullet = [randint(0, max_bullet), randint(0, max_bullet), randint(0, max_bullet), randint(0, max_bullet)]
     bullet_used = [0, 0, 0, 0]
     alive = [1, 1, 1, 1]
 
@@ -337,6 +337,12 @@ def challenge():
         bullet_used[b] += 1
         pygame.display.flip()
         time.sleep(1)
+        if bullet_used[b] == bullet[b]:
+            player_dead_box = pygame.Rect(screen_width // 2 + 200, screen_height // 2 + 215, 400, 70)
+            dbwt(screen, player_dead_box, f"Player {b+1} took a headshot!", 70, "white", "black", 10, align="center")
+            alive[b] = -1
+            pygame.display.flip()
+            time.sleep(1)
     else:
         lose_text_box = pygame.Rect(screen_width // 2 - 200, screen_height // 2 + 215, 400, 70)
         dbwt(screen, lose_text_box, f"Player {b+1} is not a liar!", 70, "white", "black", 10, align="center")
