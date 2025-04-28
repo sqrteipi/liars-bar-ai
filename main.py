@@ -10,8 +10,9 @@ import time
 
 # Initialization
 pygame.init()
-screen_width = 1280
-screen_height = 720
+display_info = pygame.display.Info()
+screen_width = display_info.current_w
+screen_height = display_info.current_h
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 current_state = "main"
@@ -30,6 +31,9 @@ def start():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit()
         
         current_time = pygame.time.get_ticks()
 
@@ -152,6 +156,9 @@ def game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    quit()
 
         # keys = pygame.key.get_pressed()
         mouse_pos = pygame.mouse.get_pos()
